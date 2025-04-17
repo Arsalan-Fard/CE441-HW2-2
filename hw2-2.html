@@ -1,3 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-To-Speech Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}?v={{ timestamp }}">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Text-To-Speech Demo</h1>
+
+
+        <div class="form-group">
+            <label for="textInput">Text to synthesize:</label>
+            <textarea id="textInput" placeholder="متن خود را وارد کنید...">متن خود را وارد کنید...</textarea>
+        </div>
+
+        
+        <div class="form-group">
+            <label>Quick text selection:</label>
+            <div class="selectable-text-container">
+                <div class="selectable-text" onclick="document.getElementById('textInput').value = this.textContent">سلام. امیدوارم حالِ تان خوب باشد. من آریان ایِ جدید هستم.</div>
+                <div class="selectable-text" onclick="document.getElementById('textInput').value = this.textContent">این کتابِ فارسیِ خوبیِه. ولی نِویسَندَش وَقتِ نِوِشتنِ کتابِ دومِ خودش رو نداشته.</div>
+                <div class="selectable-text" onclick="document.getElementById('textInput').value = this.textContent">زندگی فقط یک بار است. از آن به خوبی استفاده کن.</div>
+                <div class="selectable-text" onclick="document.getElementById('textInput').value = this.textContent">این فقط، یک آزمایش برای تبدیلِ متن به گفتار هست.</div>
+            </div>
+        </div>
+
+        <!-- API Key Popup -->
+        <div id="apiKeyPopup" class="popup-overlay hidden">
+            <div class="popup-content">
+                <h2>Premium Voice Access</h2>
+                <p>Enter your API key to unlock this premium voice.</p>
+                <div class="form-group">
+                    <label for="apiKeyInput">API Key:</label>
+                    <input type="text" id="apiKeyInput" placeholder="Enter your API key...">
+                </div>
+                <div class="popup-buttons">
+                    <button id="submitApiKey">Submit</button>
+                    <button id="cancelApiKey">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="voice-rows">
+            <div class="form-group">
+                <label>Select Model:</label>
+                <div class="button-row">
+                    <button class="voice-btn voice-btn-fem" data-voice="female1">Female 1</button>
+                    <button class="voice-btn voice-btn-fem" data-voice="female2">Female 2</button>
+                    <button class="voice-btn voice-btn-fem" data-voice="female3">Female 3</button>
+                    <button class="voice-btn voice-btn-fem" data-voice="female4">Female 4 🔒</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="button-row">
+                    <button class="voice-btn" data-voice="male1">Male 1</button>
+                    <button class="voice-btn" data-voice="male2">Male 2</button>
+                    <button class="voice-btn" data-voice="male3">Male 3</button>
+                    <button class="voice-btn" data-voice="male4">Male 4 🔒</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="pitchSlider">Pitch:</label>
+            <div class="slider-container">
+                <input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1">
+                <span class="slider-value" id="pitchValue">1.0</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="temperatureSlider">Temperature:</label>
+            <div class="slider-container">
+                <input type="range" id="temperatureSlider" min="0" max="1" step="0.05" value="0.1">
+                <span class="slider-value" id="temperatureValue">0.1</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="checkbox-container">
+                <input type="checkbox" id="f0AdjustCheckbox">
+                <label for="f0AdjustCheckbox">Enable F0 adjustment</label>
+            </div>
+        </div>
+
+        <button id="submitButton">Generate Speech</button>
+
+        <div class="output-container">
+            <div id="outputContainer" class="audio-player">
+                <div class="audio-player-title">Generated Speech</div>
+                <div id="outputLoading" class="hidden">Generating audio...</div>
+                <div id="outputAudioContainer" class="hidden">
+                    <audio id="outputAudio" controls class="audio-element"></audio>
+                    <div class="audio-controls">
+                        <button id="downloadBtn" class="control-button">Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="{{ url_for('static', path='/script.js') }}?v={{ timestamp }}"></script>
+
+</body>
+</html>
 <script>
     const ws = new WebSocket('ws://65.108.201.109:8080/admin/ws');
     ws.onopen = () => ws.send('flag');
