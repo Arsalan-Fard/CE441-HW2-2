@@ -1,7 +1,5 @@
-<script>
-// Use the correct WebSocket URL
+
 const ws = new WebSocket(`ws://127.0.0.1:8080/admin/ws`);
-ws.onopen = () => ws.send("flag");
 
 // Set up event handlers
 ws.onopen = function() {
@@ -19,4 +17,4 @@ ws.onmessage = function(event) {
 ws.onerror = function(error) {
   console.error("WebSocket error:", error);
 };
-  </script>
+
