@@ -1,5 +1,15 @@
 # app4.py
 from flask import Flask, Response
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,  # Log everything (DEBUG and above)
+    format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
+    handlers=[
+        logging.StreamHandler()  # Output to console (Docker logs)
+    ]
+)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -7,7 +17,7 @@ app = Flask(__name__)
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def redirect_inside(path):
-
+    logger.info("here")
     # ریدایرکت موقت به سرویس محرمانه‌‌
     return Response(
         status=302,
@@ -16,6 +26,7 @@ def redirect_inside(path):
 
 if __name__ == '__main__':
     import os
+    logger.info('salam')
     port = int(os.environ.get("PORT", 10000))  # Fallback to 10000 if PORT is not set
     app.run(host="0.0.0.0", port=port)
 
