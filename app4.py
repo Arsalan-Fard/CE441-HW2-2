@@ -7,7 +7,6 @@ app = Flask(__name__)
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def redirect_inside(path):
-    print(f"[+] Listening on port {port}")
 
     # ریدایرکت موقت به سرویس محرمانه‌‌
     return Response(
