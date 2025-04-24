@@ -7,6 +7,8 @@ app = Flask(__name__)
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def redirect_inside(path):
+    print(f"[+] Listening on port {port}")
+
     # ریدایرکت موقت به سرویس محرمانه‌‌
     return Response(
         status=302,
@@ -14,5 +16,8 @@ def redirect_inside(path):
     )
 
 if __name__ == '__main__':
-    # app2 تنها روی پورت پیش‌فرض HTTP (۸۰) تماس می‌گیرد
-    app.run(host='0.0.0.0', port=80)
+    import os
+    port = int(os.environ.get("PORT", 10000))  # Fallback to 10000 if PORT is not set
+    app.run(host="0.0.0.0", port=port)
+
+
