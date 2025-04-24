@@ -1,5 +1,7 @@
 
 from flask import Flask, redirect, Response
+import logging
+
 logging.basicConfig(
     level=logging.DEBUG,  # Log everything (DEBUG and above)
     format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
